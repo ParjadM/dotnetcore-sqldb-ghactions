@@ -11,6 +11,8 @@ env:
   AZURE_RESOURCEGROUP_NAME: demo-webappsql-gh-actions
   SQLSERVER_NAME: demo-webappsql-gh-actions-srv
   DATABASE_NAME: demo-webappsql-gh-actions-db
+  SQLADMIN_LOGIN: ${{ secrets.SQLADMIN_LOGIN }}
+  SQLADMIN_PASS: ${{ secrets.SQLADMIN_PASS }}
 
 jobs:
   build-and-deploy:
@@ -35,7 +37,7 @@ jobs:
         wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
         sudo dpkg -i packages-microsoft-prod.deb
         sudo apt-get update
-        sudo apt-get install -y aspnetcore-runtime-3.1
+        sudo apt-get install -y aspnetcore-runtime-3.1 dotnet-sdk-3.1
 
     - name: dotnet build and publish
       run: |
