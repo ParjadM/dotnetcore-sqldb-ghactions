@@ -11,8 +11,6 @@ env:
   AZURE_RESOURCEGROUP_NAME: demo-webappsql-gh-actions
   SQLSERVER_NAME: demo-webappsql-gh-actions-srv
   DATABASE_NAME: demo-webappsql-gh-actions-db
-  SQLADMIN_LOGIN: ${{ secrets.SQLADMIN_LOGIN }}
-  SQLADMIN_PASS: ${{ secrets.SQLADMIN_PASS }}
 
 jobs:
   build-and-deploy:
@@ -32,14 +30,12 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    - name: Install .NET Core 3.1 runtime
+    - name: Install .NET Core 3.1 ASP.NET runtime
       run: |
         wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
         sudo dpkg -i packages-microsoft-prod.deb
-        sudo apt-get update; \
-        sudo apt-get install -y apt-transport-https && \
-        sudo apt-get update && \
-        sudo apt-get install -y dotnet-runtime-3.1
+        sudo apt-get update
+        sudo apt-get install -y aspnetcore-runtime-3.1
 
     - name: dotnet build and publish
       run: |
