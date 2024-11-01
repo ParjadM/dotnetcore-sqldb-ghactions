@@ -81,6 +81,7 @@ jobs:
 
     - name: Update Database
       run: |
+        echo "::add-path::$(dotnet --info | grep 'Base Path' | awk '{print $3}')/dotnet-ef"
         dotnet tool install --global dotnet-ef --version 6.0.8
         dotnet ef database update
       env:
