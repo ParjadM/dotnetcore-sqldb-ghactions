@@ -6,7 +6,7 @@ products:
 - Azure Web Apps
 - Azure SQL Database
 languages:
-- dotnet
+- dotnet 
 ---
 
 # ASP.NET Core and Azure SQL db for GitHub Actions
