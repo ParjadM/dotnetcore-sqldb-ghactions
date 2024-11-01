@@ -11,6 +11,8 @@ env:
   AZURE_RESOURCEGROUP_NAME: demo-webappsql-gh-actions
   SQLSERVER_NAME: demo-webappsql-gh-actions-srv
   DATABASE_NAME: demo-webappsql-gh-actions-db
+  SQLADMIN_LOGIN: ${{ secrets.SQLADMIN_LOGIN }}
+  SQLADMIN_PASS: ${{ secrets.SQLADMIN_PASS }}
 
 jobs:
   build-and-deploy:
