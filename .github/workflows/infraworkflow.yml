@@ -15,6 +15,7 @@ env:
     DATABASE_NAME: mydatabase                          
     SQLADMIN_LOGIN: ${{ secrets.SQLADMIN_LOGIN }}    
     SQLADMIN_PASS: ${{ secrets.SQLADMIN_PASS }}        
+
 jobs:
     build-and-deploy-to-dev:
       runs-on: ubuntu-latest
