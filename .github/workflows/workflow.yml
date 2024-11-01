@@ -11,8 +11,6 @@ env:
   AZURE_RESOURCEGROUP_NAME: demo-webappsql-gh-actions
   SQLSERVER_NAME: demo-webappsql-gh-actions-srv
   DATABASE_NAME: demo-webappsql-gh-actions-db
-  SQLADMIN_LOGIN: ${{ secrets.SQLADMIN_LOGIN }}
-  SQLADMIN_PASS: ${{ secrets.SQLADMIN_PASS }}
 
 jobs:
   build-and-deploy:
@@ -34,8 +32,11 @@ jobs:
 
     - name: Install .NET Core 3.1 runtime
       run: |
-        sudo apt-get install -y apt-transport-https
-        sudo apt-get update
+        wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+        sudo dpkg -i packages-microsoft-prod.deb
+        sudo apt-get update; \
+        sudo apt-get install -y apt-transport-https && \
+        sudo apt-get update && \
         sudo apt-get install -y dotnet-runtime-3.1
 
     - name: dotnet build and publish
@@ -53,8 +54,8 @@ jobs:
     - name: create db connection string
       run: |
         CONN_STR=$(az sql db show-connection-string --client ado.net --server ${{ env.SQLSERVER_NAME }} --name ${{ env.DATABASE_NAME }} -o tsv)
-        CONN_STR=$(echo $CONN_STR | sed "s/<username>/${{ env.SQLADMIN_LOGIN }}/g")
-        CONN_STR=$(echo $CONN_STR | sed "s/<password>/${{ env.SQLADMIN_PASS }}/g")
+        CONN_STR=$(echo $CONN_STR | sed "s/<username>/${{ secrets.SQLADMIN_LOGIN }}/g")
+        CONN_STR=$(echo $CONN_STR | sed "s/<password>/${{ secrets.SQLADMIN_PASS }}/g")
         echo "SQL_DB_CONN_STR=$CONN_STR" >> $GITHUB_ENV
 
     - name: Update Database
