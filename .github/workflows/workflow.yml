@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 env:
-  AZURE_WEBAPP_NAME: demo-webappsql-gh-actions-unique
+  AZURE_WEBAPP_NAME: demo-webappsql-gh-actions-eastus
   AZURE_WEBAPP_PACKAGE_PATH: '.'
   DOTNET_VERSION: '6.0'
   AZURE_RESOURCEGROUP_NAME: MyResourceGroup
