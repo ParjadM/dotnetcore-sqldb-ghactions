@@ -73,16 +73,13 @@ jobs:
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
 
-    - name: Create DB connection string
+    - name: Set DB connection string
       run: |
-        CONN_STR=$(az sql db show-connection-string --client ado.net --server ${{ env.SQLSERVER_NAME }} --name ${{ env.DATABASE_NAME }} -o tsv)
-        CONN_STR=$(echo $CONN_STR | sed "s/<username>/${{ env.SQLADMIN_LOGIN }}/g")
-        CONN_STR=$(echo $CONN_STR | sed "s/<password>/${{ env.SQLADMIN_PASS }}/g")
-        echo "SQL_DB_CONN_STR=$CONN_STR" >> $GITHUB_ENV
+        echo "SQL_DB_CONN_STR=Server=tcp:${{ env.SQLSERVER_NAME }}.database.windows.net,1433;Initial Catalog=${{ env.DATABASE_NAME }};Persist Security Info=False;User ID=${{ env.SQLADMIN_LOGIN }};Password=${{ env.SQLADMIN_PASS }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" >> $GITHUB_ENV
 
     - name: Output Connection String (Debug)
       run: |
-        echo "Connection String: ${SQL_DB_CONN_STR}" | sed 's/Password=.*;/Password=****;/g'
+        echo "Connection String: ${{ env.SQL_DB_CONN_STR }}" | sed 's/Password=[^;]*/Password=****/g'
 
     - name: Update Database
       run: |
