@@ -34,55 +34,36 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         enable-AzPSSession: true
 
-    - name: Azure CLI script
-      uses: azure/cli@v2
-      with:
-        azcliversion: latest
-        inlineScript: |
-          az account show
-
-    - name: Azure PowerShell script
-      uses: azure/powershell@v2
-      with:
-        azPSVersion: "latest"
-        inlineScript: |
-          Get-AzContext
-
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '6.0.x'
 
-    - name: Install .NET Core 3.1 ASP.NET runtime
-      run: |
-        wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-        sudo dpkg -i packages-microsoft-prod.deb
-        sudo apt-get update
-        sudo apt-get install -y aspnetcore-runtime-3.1
+    - name: Restore dependencies
+      run: dotnet restore
 
-    - name: dotnet build and publish
+    - name: Build and publish
       run: |
         dotnet build --configuration Release
         dotnet publish -c Release -o myapp
 
-    - name: 'Run Azure webapp deploy action using publish profile credentials'
+    - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
 
-    - name: create db connection string
+    - name: Create DB connection string
       run: |
         CONN_STR=$(az sql db show-connection-string --client ado.net --server ${{ env.SQLSERVER_NAME }} --name ${{ env.DATABASE_NAME }} -o tsv)
         CONN_STR=$(echo $CONN_STR | sed "s/<username>/${{ secrets.SQLADMIN_LOGIN }}/g")
         CONN_STR=$(echo $CONN_STR | sed "s/<password>/${{ secrets.SQLADMIN_PASS }}/g")
-        echo "SQL_DB_CONN_STR=$CONN_STR" >> $GITHUB_ENV
+        echo "ConnectionStrings__MyDbConnection=$CONN_STR" >> $GITHUB_ENV
 
     - name: Update Database
       run: |
-        dotnet tool install --global dotnet-ef --version 6.0.8
-        echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+        dotnet tool restore
         dotnet ef database update
       env:
-        ConnectionStrings__MyDbConnection: ${{ env.SQL_DB_CONN_STR }}
+        ConnectionStrings__MyDbConnection: ${{ env.ConnectionStrings__MyDbConnection }}
