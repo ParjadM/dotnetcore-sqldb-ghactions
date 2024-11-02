@@ -81,8 +81,3 @@ jobs:
 
     - name: Update Database
       run: |
-        dotnet tool install --global dotnet-ef --version 6.0.8
-        echo "::add-path::$(dirname $(dirname $(realpath $(which dotnet))))/.dotnet/tools"
-        dotnet ef database update
-      env:
-        ConnectionStrings__MyDbConnection: ${{ env.SQL_DB_CONN_STR }}
