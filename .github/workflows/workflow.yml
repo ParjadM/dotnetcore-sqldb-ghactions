@@ -77,9 +77,11 @@ jobs:
       run: |
         echo "SQL_DB_CONN_STR=Server=tcp:${{ env.SQLSERVER_NAME }}.database.windows.net,1433;Initial Catalog=${{ env.DATABASE_NAME }};Persist Security Info=False;User ID=${{ env.SQLADMIN_LOGIN }};Password=${{ env.SQLADMIN_PASS }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" >> $GITHUB_ENV
 
+
     - name: Output Connection String (Debug)
       run: |
-        echo "Connection String: ${{ env.SQL_DB_CONN_STR }}" | sed 's/Password=[^;]*/Password=****/g'
+        echo "Connection String: $SQL_DB_CONN_STR" | sed 's/Password=.*;/Password=****;/g'
+
 
     - name: Update Database
       run: |
