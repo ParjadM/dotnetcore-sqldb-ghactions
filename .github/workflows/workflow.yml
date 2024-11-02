@@ -12,7 +12,7 @@ env:
   AZURE_WEBAPP_NAME: demo-webappsql-gh-actions-unique
   AZURE_WEBAPP_PACKAGE_PATH: '.'
   DOTNET_VERSION: '6.0'
-  AZURE_RESOURCEGROUP_NAME: demo-webappsql-gh-actions
+  AZURE_RESOURCEGROUP_NAME: MyResourceGroup
   SQLSERVER_NAME: demo-webappsql-gh-actions-srv
   DATABASE_NAME: demo-webappsql-gh-actions-db
   SQLADMIN_LOGIN: 'Sqladminuser'
