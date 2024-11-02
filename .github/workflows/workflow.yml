@@ -10,7 +10,7 @@ permissions:
 
 env:
   AZURE_WEBAPP_NAME: demo-webappsql-gh-actions-eastus
-  AZURE_WEBAPP_PACKAGE_PATH: '.'
+  AZURE_WEBAPP_PACKAGE_PATH: './publish'
   DOTNET_VERSION: '6.0'
   AZURE_RESOURCEGROUP_NAME: MyResourceGroup
   SQLSERVER_NAME: demo-webappsql-gh-actions-srv
@@ -52,5 +52,4 @@ jobs:
 
     - name: Install .NET Core 3.1 ASP.NET runtime
       run: |
-        wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-        sudo dpkg -i packages-microsoft-prod.de
+        wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.de
